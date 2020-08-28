@@ -1,3 +1,5 @@
+<!--Sam Lindsey, August 26th 2020, Project for Iterative LLC -->
+
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');

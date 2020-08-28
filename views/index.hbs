@@ -381,14 +381,14 @@
 <head>
     <title>Distance Matrix Service</title>
     <style>
-        table, tr, th, td{
+        table, tr, th, td {
             border: 1px solid black;
             padding: 10px;
             text-align: left;
         }
 
-        th{
-            height:20px;
+        th {
+            height: 20px;
             width: 40px;
         }
 
@@ -441,16 +441,20 @@
 
         <label for="end">End Destination:</label>
         <input type="text" id="end" name="end"><br><br>
-
-        <button onclick="calcDist(document.getElementById('begin').value,document.getElementById('end').value)">
-            Calculate distance and travel time!
-        </button>
-
+<!--        <a href="/insert">-->
+            <button onclick="calcDist(document.getElementById('begin').value,document.getElementById('end').value)">
+                Calculate distance and travel time!
+            </button>
+<!--        </a>-->
     </div>
     <div>
         <strong>Results</strong>
+        <div id="output"></div>
         <br><br>
         <!-- Create and populate the table with data from mongoDB-->
+        <a href="/get-data">
+            <button> Load all previous searches!</button>
+        </a>
         <table id="locationTable">
             <thead>
             <tr>
@@ -460,34 +464,32 @@
                 <th>Travel Time</th>
             </tr>
             </thead>
-           {{!-- <tbody>
+            <tbody>
             {{# each items}}
-                <tr>
-                    <td> {{this.originList[0]}} </td>
-                    <td> {{this.destinationList[0]}} </td>
-                    <td> {{this.results[0].distance}} </td>
-                    <td> {{this.results[0].duration}} </td>
-                </tr>
+                <article class="item">
+                    <tr>
+                        <td> {{this.originList}} </td>
+                        <td> {{this.destination}} </td>
+                        <td> {{this.distance}} </td>
+                        <td> {{this.duration}} </td>
+
+                    </tr>
+                </article>
             {{/each}}
-            </tbody> --}}
+            </tbody>
         </table>
     </div>
-    <div id="output"></div>
 </div>
 <div id="map"></div>
 <script>
 
     function initMap() {
-        //var origin1 = {lat: 55.93, lng: -3.118};
+
         const origin = document.getElementById("begin");
         const autocompleteOrg = new google.maps.places.Autocomplete(origin);
 
         const destination = document.getElementById("end");
         const autcompleteDest = new google.maps.places.Autocomplete(destination);
-
-        //var origin2 = 'Greenwich, England';
-        //var destinationA = 'Stockholm, Sweden';
-        //var destinationB = {lat: 50.087, lng: 14.421};
 
         var map = new google.maps.Map(document.getElementById('map'), {
             center: {lat: 35.093301, lng: -106.568415},
@@ -556,9 +558,20 @@
                     for (var j = 0; j < results.length; j++) {
                         geocoder.geocode({'address': destinationList[j]},
                                 showGeocodedAddressOnMap(true));
-                        outputDiv.innerHTML += originList[i] + ' to ' + destinationList[j] +
-                                ': ' + results[j].distance.text + ' in ' +
-                                results[j].duration.text + '<br>';
+
+                        console.log(originList);
+                        console.log(destinationList);
+                        console.log(results[j].distance.text);
+                        console.log(results[j].duration.text);
+
+                        var origin = originList[i];
+                        var destination = destinationList[j];
+                        var distance = results[j].distance.text;
+                        var duration = results[j].duration.text;
+
+                        outputDiv.innerHTML += origin + ' to ' + destination +
+                                ': ' + distance + ' in ' +
+                                duration + '<br>';
                     }
                 }
             }
@@ -573,8 +586,10 @@
         markersArray = [];
     }
 </script>
+
 <script defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA6pka5CajvSHDBrOPwKGKy7BwkuMltTPk&callback=initMap&libraries=places&v=weekly">
 </script>
+
 </body>
 </html>
