@@ -1,6 +1,9 @@
 <!--Sam Lindsey, August 26th 2020, Project for Iterative LLC -->
 
 
+
+<!-- ALL OF THE CODE BELOW IS PRACTICE, ONLY LEFT IN TO SHOW THE WORK I DID!!!-->
+
 <!--<!DOCTYPE html>-->
 <!--<html>-->
 <!--<head>-->
@@ -376,8 +379,11 @@
 <!--</body>-->
 <!--</html>-->
 
+<!--Current code begins-->
 <!DOCTYPE html>
 <html>
+
+<!--CSS STYLING CODE-->
 <head>
     <title>Distance Matrix Service</title>
     <style>
@@ -436,21 +442,29 @@
 <div id="right-panel">
     <div id="inputs">
 
-        <label for="begin">Starting Origin:</label>
+        <!--The user will input their starting location here-->
+        <label for="begin">Starting Origin (Must be selected via Autocomplete):</label>
         <input type="text" id="begin" name="begin"><br><br>
 
-        <label for="end">End Destination:</label>
+        <!--The user will input their ending location here-->
+        <label for="end">End Destination (Must be selected via Autocomplete):</label>
         <input type="text" id="end" name="end"><br><br>
 <!--        <a href="/insert">-->
+
+            <!--This button click will trigger the calcDist function described in more detail below.
+            It will utilize the user inputs above.-->
             <button onclick="calcDist(document.getElementById('begin').value,document.getElementById('end').value)">
                 Calculate distance and travel time!
             </button>
+
 <!--        </a>-->
     </div>
     <div>
+        <!-- This will display the results of the calculation above-->
         <strong>Results</strong>
         <div id="output"></div>
         <br><br>
+
         <!-- Create and populate the table with data from mongoDB-->
         <a href="/get-data">
             <button> Load all previous searches!</button>
@@ -480,9 +494,13 @@
         </table>
     </div>
 </div>
+
 <div id="map"></div>
+
 <script>
 
+    //This function intializes the map and autocomplete input sections and sets the location of the map
+    //to Albuquerque, NM (Specifically the Iterative, LLC offices)
     function initMap() {
 
         const origin = document.getElementById("begin");
@@ -498,6 +516,7 @@
 
     }
 
+    //This function uses the Matrix API to calculate the distance and duration of the journey
     function calcDist(origin, destination) {
         var map = new google.maps.Map(document.getElementById('map'), {
             center: {origin},
@@ -518,6 +537,8 @@
         console.log(destination);
 
         var service = new google.maps.DistanceMatrixService;
+        //Origins and Destinations are the only two "required" parameters, the rest are optional
+        //and can be changed--> See the Distance Matrix documentation
         service.getDistanceMatrix({
             origins: [origin],
             destinations: [destination],
@@ -535,6 +556,8 @@
                 outputDiv.innerHTML = '';
                 deleteMarkers(markersArray);
 
+                //This will show us the Origin (O) and Destination (D) after
+                //the have been input and distance and duration have been calculated
                 var showGeocodedAddressOnMap = function (asDestination) {
                     var icon = asDestination ? destinationIcon : originIcon;
                     return function (results, status) {
@@ -559,6 +582,7 @@
                         geocoder.geocode({'address': destinationList[j]},
                                 showGeocodedAddressOnMap(true));
 
+                        //Console logs to ensure elements are being kept track of correctly
                         console.log(originList);
                         console.log(destinationList);
                         console.log(results[j].distance.text);
@@ -579,6 +603,7 @@
 
     }
 
+    //Delete the markers so the map can be reset correctly
     function deleteMarkers(markersArray) {
         for (var i = 0; i < markersArray.length; i++) {
             markersArray[i].setMap(null);
@@ -587,6 +612,7 @@
     }
 </script>
 
+<!--Load the maps and required API-->
 <script defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA6pka5CajvSHDBrOPwKGKy7BwkuMltTPk&callback=initMap&libraries=places&v=weekly">
 </script>
